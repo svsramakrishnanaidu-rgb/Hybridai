@@ -1,0 +1,1644 @@
+/* ==========================================================================
+   HYDRO — reference-driven workspace
+   Layered artwork, black/burgundy/gold interface, responsive chat workspace.
+   This file is additive: the existing component styles remain for panels.
+   ========================================================================== */
+
+:root {
+  --hx-black: #0b090a;
+  --hx-panel: #151115;
+  --hx-burgundy: #401321;
+  --hx-burgundy-active: #711f39;
+  --hx-gold: #d6b473;
+  --hx-text: #f4ede3;
+  --hx-text-2: #c8bfc6;
+  --hx-ice: #a6ecff;
+  --hx-violet: #ac83e8;
+  --hx-line: rgba(214, 180, 115, 0.22);
+  --hx-line-strong: rgba(214, 180, 115, 0.45);
+}
+
+html,
+body {
+  background: var(--hx-black);
+}
+
+.app {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--hx-black);
+  color: var(--hx-text);
+  overflow: hidden;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --bg-x: 0px;
+  --bg-y: 0px;
+  --ai-x: 0px;
+  --ai-y: 0px;
+  --voice-energy: 0;
+}
+
+.app :focus-visible {
+  outline: 2px solid var(--hx-gold);
+  outline-offset: 2px;
+}
+
+/* ── top bar ───────────────────────────────────────────────────────────── */
+
+.hx-top {
+  flex: 0 0 auto;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--hx-line-strong);
+  background: #0a0809;
+  z-index: 30;
+}
+
+.hx-mark {
+  width: 34px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  border: 1px solid rgba(214, 180, 115, 0.45);
+  background:
+    linear-gradient(160deg, rgba(214, 180, 115, 0.28), rgba(64, 19, 33, 0.6)),
+    #120e10;
+  color: var(--hx-gold);
+  font-family: var(--font-grotesk), sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.04em;
+  box-shadow: inset 0 0 14px rgba(214, 180, 115, 0.14);
+}
+
+.hx-word {
+  font-family: var(--font-grotesk), sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.2em;
+  color: var(--hx-gold);
+  text-shadow: 0 0 18px rgba(214, 180, 115, 0.22);
+}
+
+.hx-top-div {
+  width: 1px;
+  height: 24px;
+  background: var(--hx-line-strong);
+  margin: 0 6px;
+}
+
+.hx-top-title {
+  font-size: 15px;
+  color: var(--hx-text);
+  letter-spacing: 0.01em;
+}
+
+.hx-top-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hx-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 7px;
+  border: 1px solid rgba(214, 180, 115, 0.55);
+  background: linear-gradient(180deg, #4a1726, #3a101d);
+  color: var(--hx-text);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.hx-new:hover {
+  background: linear-gradient(180deg, #5a1c2f, #471523);
+  border-color: var(--hx-gold);
+}
+
+.hx-iconbtn {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  border: 1px solid var(--hx-line);
+  background: transparent;
+  color: var(--hx-gold);
+  cursor: pointer;
+}
+
+.hx-iconbtn:hover {
+  background: rgba(214, 180, 115, 0.08);
+}
+
+.hx-menu-toggle {
+  display: none;
+}
+
+/* ── layout ────────────────────────────────────────────────────────────── */
+
+.hx-layout {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+}
+
+.hx-rail {
+  flex: 0 0 86px;
+  width: 86px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  border-right: 1px solid var(--hx-line-strong);
+  background: #0a0809;
+  z-index: 20;
+}
+
+.hx-rail-btn {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid rgba(214, 180, 115, 0.3);
+  background: transparent;
+  color: var(--hx-gold);
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.hx-rail-btn:hover {
+  background: rgba(214, 180, 115, 0.08);
+  border-color: rgba(214, 180, 115, 0.55);
+}
+
+.hx-rail-btn[data-active="true"] {
+  background: linear-gradient(180deg, #4a1727, #401321);
+  border-color: var(--hx-burgundy-active);
+  color: var(--hx-text);
+  box-shadow: inset 0 0 18px rgba(113, 31, 57, 0.5);
+}
+
+.hx-rail-spacer {
+  flex: 1;
+}
+
+.hx-work {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--hx-black);
+}
+
+/* ── artwork stage ─────────────────────────────────────────────────────── */
+
+.hydro-stage {
+  --hydro-art: url("/art/hydro-scene.webp");
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #080609;
+  flex: 0 0 auto;
+  height: clamp(260px, 44vw, 620px);
+  transition: height 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  user-select: none;
+}
+
+/* The artwork is 1456×650, so a wide stage cannot be filled without cropping.
+   Instead of cropping the portrait, the same file is used once more as a very
+   blurred, darkened ambient bed: the letterboxed sides read as atmosphere
+   around a lit composition rather than as black bars. */
+.hydro-stage::before {
+  content: "";
+  position: absolute;
+  inset: -4%;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--hydro-art);
+  background-size: cover;
+  background-position: center;
+  filter: blur(56px) saturate(1.05) brightness(0.34);
+  opacity: 0.85;
+  transform: scale(1.06);
+}
+
+.app[data-mode="welcome"] .hydro-stage {
+  flex: 1 1 auto;
+  min-height: 240px;
+  max-height: 660px;
+}
+
+.app[data-mode="conversation"] .hydro-stage {
+  height: 196px;
+}
+
+.app[data-mode="conversation"] .hydro-stage[data-expanded="true"] {
+  height: min(46dvh, 470px);
+}
+
+/* Tablet portrait has the height but not the width: a 660px stage would leave
+   the 2.24:1 artwork as a thin band, so cap the stage near the artwork's own
+   height for the available width. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .app[data-mode="welcome"] .hydro-stage {
+    max-height: clamp(300px, 48vw, 500px);
+  }
+}
+
+.hydro-backdrop,
+.hydro-avatar,
+.hydro-heart,
+.hydro-flames,
+.hydro-heart-glow {
+  pointer-events: none;
+}
+
+.hydro-backdrop {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(var(--bg-x, 0px), var(--bg-y, 0px), 0);
+  will-change: transform;
+}
+
+.hydro-avatar {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(var(--ai-x, 0px), var(--ai-y, 0px), 0);
+  will-change: transform;
+}
+
+.hydro-avatar-body {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 78%;
+  will-change: transform;
+}
+
+/* Every layer shares one canvas and one mapping, so a feathered cut-out can
+   never drift away from the anatomy underneath it.
+   `contain` is deliberate: the full composition (head, both tattooed hands) must
+   stay visible. `cover` was cropping the crown and the outer palms whenever the
+   stage was wider or shorter than the artwork's 2.24 : 1. */
+.art {
+  position: absolute;
+  /* A small vertical breathing space so the crown is never flush against the
+     stage edge; `auto` sizes let the inset box drive a replaced element. */
+  inset: 2.5% 0;
+  width: 100%;
+  height: 95%;
+  object-fit: contain;
+  object-position: 50% 50%;
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+}
+
+.art-mobile {
+  display: none;
+}
+
+.hydro-flames {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  opacity: 0.12;
+  filter: saturate(1.2) brightness(1.05);
+}
+
+.hydro-stage[data-motion="on"] .hydro-flames {
+  animation: hydro-flame 7s ease-in-out infinite alternate;
+}
+
+.hydro-heart {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  opacity: calc(0.2 + var(--voice-energy) * 0.72);
+  filter: saturate(1.15)
+    drop-shadow(0 0 calc(6px + var(--voice-energy) * 18px) rgba(166, 236, 255, 0.55));
+  transition: opacity 90ms linear;
+}
+
+.hydro-heart-glow {
+  position: absolute;
+  left: 60.5%;
+  top: 72.8%;
+  width: 26%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(166, 236, 255, calc(0.22 + var(--voice-energy) * 0.45)),
+    rgba(120, 210, 255, 0.08) 45%,
+    transparent 70%
+  );
+  filter: blur(6px);
+  mix-blend-mode: screen;
+  opacity: calc(0.4 + var(--voice-energy) * 0.6);
+}
+
+.hydro-filaments {
+  position: absolute;
+  inset: -8px;
+  mix-blend-mode: screen;
+  opacity: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 18%,
+    rgba(166, 236, 255, 0.42) 48%,
+    rgba(172, 131, 232, 0.28) 62%,
+    transparent 82%
+  );
+  background-size: 100% 190%;
+  background-position: 0 120%;
+  -webkit-mask-image: radial-gradient(ellipse 22% 32% at 59% 55%, #000 35%, transparent 78%);
+  mask-image: radial-gradient(ellipse 22% 32% at 59% 55%, #000 35%, transparent 78%);
+  transition: opacity 300ms ease;
+}
+
+.hydro-stage[data-phase="between"] .hydro-filaments,
+.hydro-stage[data-phase="thinking"] .hydro-filaments {
+  opacity: 0.55;
+  animation: hydro-think 2.8s linear infinite;
+}
+
+.hydro-stage[data-phase="listening"] .hydro-avatar-body {
+  filter: brightness(calc(1 + var(--voice-energy) * 0.16));
+}
+
+.hydro-stage[data-phase="speaking"] .hydro-heart {
+  filter: saturate(1.3) brightness(calc(1.05 + var(--voice-energy) * 0.35))
+    drop-shadow(0 0 22px rgba(166, 236, 255, 0.6));
+}
+
+.hydro-stage[data-motion="on"][data-phase="standby"] .hydro-avatar-body {
+  animation: hydro-breathe 5.4s ease-in-out infinite;
+}
+
+.hydro-stage[data-motion="on"][data-phase="listening"] .hydro-avatar-body {
+  animation: hydro-breathe 4.2s ease-in-out infinite;
+}
+
+.hydro-stage[data-motion="on"][data-phase="speaking"] .hydro-avatar-body {
+  animation: hydro-breathe 3.6s ease-in-out infinite;
+}
+
+@keyframes hydro-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.006, 1.009);
+  }
+}
+
+@keyframes hydro-flame {
+  0%,
+  100% {
+    opacity: 0.1;
+  }
+  37% {
+    opacity: 0.22;
+  }
+  71% {
+    opacity: 0.15;
+  }
+}
+
+@keyframes hydro-think {
+  0% {
+    background-position: 0 130%;
+  }
+  100% {
+    background-position: 0 -130%;
+  }
+}
+
+/* ── stage chrome ─────────────────────────────────────────────────────── */
+
+.stage-status {
+  position: absolute;
+  left: 18px;
+  top: 14px;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  max-width: calc(100% - 36px);
+  padding: 6px 12px 6px 10px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(11, 9, 10, 0.72), rgba(11, 9, 10, 0.4));
+  border: 1px solid rgba(214, 180, 115, 0.16);
+  backdrop-filter: blur(6px);
+  color: var(--hx-text-2);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #8fd694;
+  box-shadow: 0 0 8px rgba(143, 214, 148, 0.7);
+}
+
+.status-dot[data-phase="requesting-mic"] {
+  background: var(--hx-gold);
+  box-shadow: 0 0 8px rgba(214, 180, 115, 0.8);
+  animation: status-pulse 1.2s ease-in-out infinite;
+}
+
+.status-dot[data-phase="listening"] {
+  background: #ff8fa4;
+  box-shadow: 0 0 10px rgba(255, 143, 164, 0.85);
+  animation: status-pulse 1.1s ease-in-out infinite;
+}
+
+.status-dot[data-phase="thinking"] {
+  background: var(--hx-violet);
+  box-shadow: 0 0 10px rgba(172, 131, 232, 0.85);
+  animation: status-pulse 1.6s ease-in-out infinite;
+}
+
+.status-dot[data-phase="speaking"] {
+  background: var(--hx-ice);
+  box-shadow: 0 0 10px rgba(166, 236, 255, 0.9);
+  animation: status-pulse 0.9s ease-in-out infinite;
+}
+
+.status-dot[data-phase="error"] {
+  background: #ff7b7b;
+  box-shadow: 0 0 10px rgba(255, 123, 123, 0.9);
+}
+
+@keyframes status-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+.status-name {
+  color: var(--hx-text);
+  font-weight: 500;
+}
+
+.status-div {
+  width: 1px;
+  height: 13px;
+  background: rgba(200, 191, 198, 0.3);
+}
+
+.status-phase {
+  color: var(--hx-text-2);
+}
+
+.status-vision {
+  color: var(--hx-gold);
+}
+
+.stage-chip {
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 6px;
+  border: 1px solid rgba(214, 180, 115, 0.45);
+  background: rgba(11, 9, 10, 0.7);
+  color: var(--hx-text);
+  font-size: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+.stage-chip[data-tone="danger"] {
+  border-color: rgba(255, 123, 123, 0.5);
+  color: #ffd5d5;
+  background: rgba(64, 19, 33, 0.75);
+}
+
+.stage-camera-actions {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  z-index: 7;
+  display: flex;
+  gap: 8px;
+}
+
+.stage-expand {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  z-index: 7;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 6px;
+  border: 1px solid rgba(214, 180, 115, 0.35);
+  background: rgba(11, 9, 10, 0.62);
+  color: var(--hx-text-2);
+  font-size: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+.stage-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+  opacity: 0;
+  transition: opacity 480ms ease;
+  z-index: 2;
+  background: #000;
+}
+
+.stage-video[data-on="true"] {
+  opacity: 1;
+}
+
+.hydro-stage[data-vision="live"] .hydro-backdrop,
+.hydro-stage[data-vision="live"] .hydro-avatar,
+.hydro-stage[data-vision="live"] .hydro-flames {
+  opacity: 0;
+  transition: opacity 480ms ease;
+}
+
+.stage-frozen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 3;
+}
+
+.stage-mini {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  z-index: 6;
+  width: 132px;
+  height: 84px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(214, 180, 115, 0.45);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background: #0b090a;
+}
+
+.stage-mini .art {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* A 132×84 thumbnail is decoration, not the hero: it may fill its frame. */
+  object-fit: cover;
+  object-position: 59% 30%;
+}
+
+.select-surface {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.select-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 6;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(11, 9, 10, 0.82);
+  border: 1px solid rgba(166, 236, 255, 0.35);
+  color: var(--hx-ice);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+.stage-selection {
+  position: absolute;
+  z-index: 6;
+  border: 1.5px solid rgba(166, 236, 255, 0.95);
+  border-radius: 3px;
+  box-shadow: 0 0 0 9999px rgba(3, 10, 14, 0.38), 0 0 16px rgba(166, 236, 255, 0.4);
+  pointer-events: none;
+}
+
+.stage-selection-tag {
+  position: absolute;
+  top: -20px;
+  left: -1px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(166, 236, 255, 0.95);
+  color: #04120f;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── prompt row ───────────────────────────────────────────────────────── */
+
+.hx-prompt {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 22px;
+  border-bottom: 1px solid rgba(214, 180, 115, 0.14);
+  min-height: 86px;
+}
+
+.hx-prompt-mark {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: var(--hx-gold);
+  font-family: var(--font-grotesk), sans-serif;
+  font-size: 25px;
+  font-weight: 700;
+  font-style: italic;
+  border-radius: 5px;
+  background: linear-gradient(160deg, rgba(214, 180, 115, 0.22), rgba(64, 19, 33, 0.35));
+}
+
+.hx-prompt-title {
+  font-size: clamp(18px, 1.7vw, 24px);
+  font-weight: 500;
+  color: var(--hx-text);
+  letter-spacing: 0.005em;
+}
+
+.hx-prompt-sub {
+  font-size: 12px;
+  color: var(--hx-text-2);
+  margin-top: 3px;
+}
+
+.hx-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hx-talk,
+.hx-vision {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 58px;
+  padding: 0 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(214, 180, 115, 0.55);
+  background: linear-gradient(180deg, #1c1517, #120d0f);
+  color: var(--hx-text);
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease, transform 120ms ease;
+  white-space: nowrap;
+}
+
+.hx-talk:hover,
+.hx-vision:hover {
+  border-color: var(--hx-gold);
+  background: linear-gradient(180deg, #2a1a1f, #171012);
+}
+
+.hx-talk:active,
+.hx-vision:active {
+  transform: translateY(1px);
+}
+
+.hx-talk[data-state="listening"] {
+  background: linear-gradient(180deg, #711f39, #4b1224);
+  border-color: #a33a57;
+  box-shadow: 0 0 24px rgba(113, 31, 57, 0.45);
+}
+
+.hx-talk[data-state="requesting"],
+.hx-vision[data-state="requesting"] {
+  border-color: var(--hx-gold);
+  color: var(--hx-gold);
+}
+
+.hx-talk[data-state="transcribing"] {
+  color: var(--hx-ice);
+  border-color: rgba(166, 236, 255, 0.5);
+}
+
+.hx-talk-done {
+  height: 58px;
+  padding: 0 18px;
+  border-radius: 10px;
+  border: 1px solid #a33a57;
+  background: linear-gradient(180deg, #711f39, #4b1224);
+  color: #fff3f5;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.hx-vision-eye {
+  width: 58px;
+  height: 38px;
+  border-radius: 4px;
+  background: #000 url("/art/vision-eye.webp") center / cover no-repeat;
+  box-shadow: inset 0 0 0 1px rgba(214, 180, 115, 0.25), 0 0 14px rgba(172, 24, 40, 0.35);
+  flex: 0 0 auto;
+}
+
+.hx-vision[data-state="live"] {
+  background: linear-gradient(180deg, #4b1224, #2c0b15);
+  border-color: #a33a57;
+}
+
+.vision-flag {
+  margin-left: 8px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hx-gold);
+}
+
+.hx-mic-level {
+  width: 54px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(244, 237, 227, 0.18);
+  overflow: hidden;
+}
+
+.hx-mic-level span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #d6b473, #ffb3c1);
+  transition: width 90ms linear;
+}
+
+/* ── thread ───────────────────────────────────────────────────────────── */
+
+.hx-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px 22px 4px;
+  scroll-behavior: smooth;
+}
+
+.app[data-mode="welcome"] .hx-scroll {
+  display: none;
+}
+
+.hx-thread {
+  max-width: 1040px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px 0 10px;
+}
+
+.hx-msg {
+  border-radius: 10px;
+  padding: 12px 15px;
+  font-size: 14.5px;
+  line-height: 1.62;
+  color: var(--hx-text);
+  overflow-wrap: anywhere;
+}
+
+.hx-msg[data-role="user"] {
+  align-self: flex-end;
+  max-width: min(86%, 640px);
+  background: linear-gradient(180deg, #2a1219, #201016);
+  border: 1px solid rgba(214, 180, 115, 0.2);
+  white-space: pre-wrap;
+  font-family: var(--font-inter), var(--font-telugu), sans-serif;
+}
+
+.hx-msg[data-role="assistant"] {
+  align-self: stretch;
+  background: linear-gradient(180deg, rgba(21, 17, 21, 0.86), rgba(16, 12, 15, 0.86));
+  border: 1px solid rgba(214, 180, 115, 0.14);
+}
+
+.hx-msg[data-role="assistant"] .msg-assistant-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--hx-gold);
+}
+
+.hx-msg[data-channel="control"] {
+  border-color: rgba(214, 180, 115, 0.3);
+  background: linear-gradient(180deg, #241016, #1a0d12);
+  color: #f0dfc4;
+  font-size: 13.5px;
+}
+
+.hx-msg .msg-assistant-body p:first-child {
+  margin-top: 0;
+}
+
+.hx-msg-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  font-size: 11.5px;
+  color: var(--hx-text-2);
+}
+
+.hx-msg-tools button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--hx-text-2);
+  font-size: 11.5px;
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+.hx-msg-tools button:hover {
+  color: var(--hx-gold);
+}
+
+.hx-msg-tools .badge {
+  border: 1px solid rgba(214, 180, 115, 0.28);
+  color: var(--hx-gold);
+  background: rgba(64, 19, 33, 0.35);
+}
+
+.hx-hero {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 2px 22px 12px;
+}
+.hx-hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hx-hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.hx-chip {
+  padding: 7px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(214, 180, 115, 0.28);
+  background: rgba(21, 17, 21, 0.7);
+  color: var(--hx-text-2);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.hx-chip:hover {
+  color: var(--hx-text);
+  border-color: var(--hx-gold);
+}
+
+/* ── composer ─────────────────────────────────────────────────────────── */
+
+.hx-composer-wrap {
+  flex: 0 0 auto;
+  padding: 0 22px calc(16px + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, transparent, rgba(11, 9, 10, 0.9) 40%);
+}
+
+.hx-talk-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 auto 8px;
+  max-width: 980px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(214, 180, 115, 0.2);
+  background: rgba(33, 16, 22, 0.7);
+  font-size: 12.5px;
+  color: var(--hx-text);
+}
+
+.hx-talk-strip[data-state="listening"] {
+  border-color: rgba(255, 143, 164, 0.5);
+}
+
+.hx-talk-strip .strip-phase {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hx-gold);
+  flex: 0 0 auto;
+}
+
+.hx-talk-strip .strip-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-inter), var(--font-telugu), sans-serif;
+}
+
+.hx-talk-strip .strip-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.hx-strip-btn {
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 6px;
+  border: 1px solid rgba(214, 180, 115, 0.35);
+  background: transparent;
+  color: var(--hx-text);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.hx-strip-btn[data-primary="true"] {
+  background: var(--hx-burgundy-active);
+  border-color: #a33a57;
+  color: #fff3f5;
+}
+
+.hx-composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 9px 10px;
+  border-radius: 11px;
+  border: 1px solid rgba(214, 180, 115, 0.32);
+  background: linear-gradient(180deg, #2b1019, #1c0c12);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), inset 0 0 24px rgba(113, 31, 57, 0.18);
+}
+
+.hx-composer:focus-within {
+  border-color: rgba(214, 180, 115, 0.6);
+}
+
+.hx-attach {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: var(--hx-gold);
+  cursor: pointer;
+}
+
+.hx-attach:hover {
+  background: rgba(214, 180, 115, 0.1);
+}
+
+.hx-c-div {
+  width: 1px;
+  align-self: stretch;
+  margin: 4px 2px;
+  background: rgba(214, 180, 115, 0.28);
+}
+
+.hx-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  resize: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--hx-text);
+  font-family: var(--font-inter), var(--font-telugu), sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 9px 4px;
+  max-height: 160px;
+  min-height: 24px;
+}
+
+.hx-input::placeholder {
+  color: #b9a9b0;
+}
+
+.hx-model {
+  flex: 0 0 auto;
+  height: 40px;
+  max-width: 132px;
+  padding: 0 6px;
+  border: none;
+  background: transparent;
+  color: var(--hx-text);
+  font-size: 13.5px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.hx-model option {
+  background: #1b0c12;
+  color: var(--hx-text);
+}
+
+.hx-send {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  border: 1px solid rgba(214, 180, 115, 0.45);
+  background: linear-gradient(180deg, #711f39, #4b1224);
+  color: var(--hx-gold);
+  cursor: pointer;
+  transition: filter 160ms ease, transform 120ms ease;
+}
+
+.hx-send:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.hx-send:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.hx-send:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.hx-composer-hint {
+  max-width: 1040px;
+  margin: 0 auto;
+  max-width: 980px;
+  margin: 7px auto 0;
+  font-size: 11px;
+  color: rgba(200, 191, 198, 0.6);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.hx-composer-hint button {
+  background: none;
+  border: none;
+  color: var(--hx-gold);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hx-inline-select {
+  background: none;
+  border: none;
+  color: var(--hx-gold);
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hx-inline-select option {
+  background: #1b0c12;
+  color: var(--hx-text);
+}
+
+.hx-error {
+  max-width: 980px;
+  margin: 6px auto 0;
+  color: #ffb3b3;
+  font-size: 12px;
+}
+
+/* ── responsive ───────────────────────────────────────────────────────── */
+
+@media (max-width: 1100px) {
+  .hx-rail {
+    width: 72px;
+    flex-basis: 72px;
+  }
+  .hx-rail-btn {
+    width: 46px;
+    height: 46px;
+  }
+}
+
+@media (max-width: 900px) {
+  .hx-rail {
+    position: fixed;
+    left: 0;
+    top: 60px;
+    bottom: 0;
+    width: 84px;
+    flex-basis: 84px;
+    transform: translateX(-100%);
+    transition: transform 220ms ease;
+    z-index: 40;
+    box-shadow: 18px 0 40px rgba(0, 0, 0, 0.5);
+  }
+  .hx-rail[data-open="true"] {
+    transform: translateX(0);
+  }
+  .hx-menu-toggle {
+    display: grid;
+  }
+  .hx-prompt {
+    padding: 12px 14px;
+    gap: 10px;
+    min-height: 76px;
+  }
+  .hx-prompt-mark {
+    width: 28px;
+    height: 34px;
+    font-size: 20px;
+  }
+  .hx-prompt-title {
+    font-size: 17px;
+  }
+  .hx-prompt-sub {
+    display: none;
+  }
+  .hx-talk,
+  .hx-vision,
+  .hx-talk-done {
+    height: 48px;
+    padding: 0 13px;
+    font-size: 13.5px;
+    gap: 7px;
+  }
+  .hx-vision-eye {
+    width: 40px;
+    height: 28px;
+  }
+  .hx-mic-level {
+    display: none;
+  }
+  .hx-composer-wrap {
+    padding: 0 12px calc(10px + env(safe-area-inset-bottom));
+  }
+  .hx-scroll {
+    padding: 4px 12px 0;
+  }
+  .hx-hero {
+    padding: 2px 12px 12px;
+  }
+  .app[data-mode="conversation"] .hydro-stage {
+    height: 156px;
+  }
+  .stage-status {
+    font-size: 11.5px;
+    left: 10px;
+    top: 9px;
+    gap: 7px;
+    max-width: calc(100% - 20px);
+  }
+  .status-vision {
+    display: none;
+  }
+  .stage-mini {
+    display: none;
+  }
+  .stage-camera-actions {
+    right: 8px;
+    bottom: 8px;
+  }
+  .stage-expand {
+    right: 8px;
+    bottom: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .art-desktop {
+    display: none;
+  }
+  .art-mobile {
+    display: block;
+    object-fit: contain;
+    object-position: 50% 50%;
+  }
+  .hydro-stage {
+    --hydro-art: url("/art/hydro-scene-mobile.webp");
+  }
+  .hydro-stage {
+    height: clamp(230px, 44dvh, 340px);
+  }
+  .app[data-mode="welcome"] .hydro-stage {
+    flex: 1 1 auto;
+    min-height: 230px;
+  }
+  .app[data-mode="conversation"] .hydro-stage {
+    height: 150px;
+  }
+  .hydro-heart-glow {
+    display: none;
+  }
+  .hx-prompt {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .hx-actions {
+    width: 100%;
+    margin-left: 0;
+    gap: 8px;
+  }
+  .hx-talk,
+  .hx-vision {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 10px;
+  }
+  .hx-talk-done {
+    flex: 0 0 auto;
+  }
+  .hx-prompt-title {
+    font-size: 16px;
+  }
+  .hx-composer {
+    padding: 7px 8px;
+    gap: 5px;
+  }
+  .hx-model {
+    max-width: 86px;
+    font-size: 12px;
+  }
+  .hx-send {
+    width: 42px;
+    height: 42px;
+  }
+  .hx-msg {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+  .hx-top-title {
+    display: none;
+  }
+  .hx-word {
+    font-size: 17px;
+  }
+  .hx-new {
+    padding: 0 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 380px) {
+  .hx-talk,
+  .hx-vision {
+    font-size: 12.5px;
+    padding: 0 7px;
+  }
+  .hx-vision-eye {
+    width: 30px;
+  }
+  .hx-model {
+    display: none;
+  }
+}
+
+/* ── reduced motion ───────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .hydro-stage *,
+  .hydro-stage *::before,
+  .hydro-stage *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .app *,
+  .app *::before,
+  .app *::after {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── helper and overlay alignment ─────────────────────────────────────── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.vision-stage-note {
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: rgba(200, 191, 198, 0.66);
+  padding: 2px 1px 4px;
+}
+
+/* The camera panel belongs to the workspace, not to the old shell. */
+.vision-dock {
+  left: auto;
+  right: 16px;
+  bottom: 96px;
+  width: 264px;
+  border-color: rgba(214, 180, 115, 0.32);
+  background: linear-gradient(180deg, rgba(33, 16, 22, 0.96), rgba(12, 9, 10, 0.95));
+  color: var(--hx-text);
+}
+
+.vision-pill {
+  left: auto;
+  right: 22px;
+  top: 74px;
+  bottom: auto;
+  border-color: rgba(214, 180, 115, 0.32);
+  background: rgba(17, 10, 13, 0.92);
+  color: var(--hx-text-2);
+}
+
+.vision-dock .vision-key,
+.vision-dock .vision-copy,
+.vision-dock .vision-val {
+  color: var(--hx-text-2);
+}
+
+.vision-dock .vision-btn,
+.vision-dock .vision-observe {
+  border-color: rgba(214, 180, 115, 0.32);
+  color: var(--hx-text);
+}
+
+.vision-dock .vision-btn[data-tone="on"] {
+  background: var(--hx-burgundy-active);
+  border-color: #a33a57;
+}
+
+.vision-dock .vision-observe {
+  background: linear-gradient(180deg, #711f39, #4b1224);
+  border-color: rgba(214, 180, 115, 0.4);
+}
+
+.vision-dock .vision-field,
+.vision-dock .field {
+  background: rgba(11, 9, 10, 0.7);
+  color: var(--hx-text);
+  border-color: rgba(214, 180, 115, 0.24);
+}
+
+/* The inspector is an overlay beside the workspace. */
+.inspector {
+  position: fixed;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  width: 372px;
+  z-index: 45;
+  display: none;
+  background: rgba(9, 7, 8, 0.94);
+  border-left: 1px solid rgba(214, 180, 115, 0.28);
+  color: var(--hx-text);
+}
+
+@media (min-width: 1180px) {
+  .inspector[data-open="true"] {
+    display: block;
+  }
+}
+
+.inspector .inspector-title {
+  color: var(--hx-gold);
+}
+
+@media (max-width: 900px) {
+  .vision-dock,
+  .vision-pill {
+    right: 10px;
+    bottom: 150px;
+  }
+  .vision-dock {
+    width: min(300px, calc(100vw - 20px));
+    max-height: 62dvh;
+    overflow-y: auto;
+  }
+  .inspector {
+    top: 60px;
+    width: 100%;
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 600px) {
+  .vision-dock,
+  .vision-pill {
+    bottom: 138px;
+  }
+}
+
+/* The camera toggle is a small pill, not a column. */
+.vision-pill {
+  top: auto;
+  height: auto;
+  min-height: 34px;
+  max-height: 44px;
+  padding: 8px 12px;
+}
+
+.hx-prompt > div {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.hx-prompt-sub {
+  max-width: 52ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hx-actions {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 1150px) {
+  .hx-talk,
+  .hx-vision {
+    padding: 0 14px;
+    font-size: 14px;
+  }
+}
+
+/* The artwork dissolves into the workspace instead of ending on a cut — softly,
+   so the lower body of the composition is not swallowed by black. */
+.hydro-stage::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 44px;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(8, 6, 9, 0.55));
+  z-index: 2;
+}
+
+.hydro-stage .stage-veil {
+  z-index: 3;
+}
+
+@media (max-width: 600px) {
+  .hx-hero {
+    padding: 0 12px 8px;
+  }
+  .hx-hero-chips {
+    gap: 6px;
+  }
+  .hx-chip {
+    font-size: 12px;
+  }
+}
+
+/* Keep the camera chip on the artwork, clear of the top bar actions. */
+.vision-pill {
+  position: fixed;
+  top: auto;
+  bottom: auto;
+  right: 22px;
+  inset-block-start: 74px;
+  z-index: 16;
+}
+
+/* Collapsed portrait: nothing to anchor any more — `contain` keeps the whole
+   composition, so the strip only needs to give it a little more height than the
+   196px it had, and mobile keeps its compact rules below. */
+@media (min-width: 601px) {
+  .app[data-mode="conversation"] .hydro-stage {
+    height: min(30dvh, 300px);
+  }
+}
+
+/* The camera chip must never widen past the artwork. */
+.vision-pill {
+  left: auto;
+  width: auto;
+  max-width: 210px;
+}
+
+@media (max-width: 600px) {
+  /* Keep the composer above the safe area on a short screen: the artwork
+     yields space and the suggestion list scrolls instead of the page. */
+  .app[data-mode="welcome"] .hydro-stage {
+    flex: 1 1 auto;
+    min-height: 180px;
+    max-height: 42dvh;
+  }
+  .hx-work {
+    overflow: hidden;
+  }
+  .hx-hero {
+    flex: 0 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .hx-top-actions .hx-iconbtn {
+    display: none;
+  }
+  .hx-new {
+    white-space: nowrap;
+  }
+  .vision-pill {
+    top: 70px;
+    right: 10px;
+    font-size: 10.5px;
+  }
+  .hx-actions {
+    gap: 8px;
+  }
+  .hx-prompt {
+    flex-wrap: wrap;
+  }
+  .hx-actions {
+    width: 100%;
+    margin-left: 0;
+  }
+  .hx-talk,
+  .hx-vision {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+/* Wide tables and code scroll inside their message, never the page. */
+.hx-msg .msg-assistant-body {
+  overflow-x: auto;
+}
+
+.hx-msg .msg-assistant-body table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  /* Start vision stays in the action row; the floating chip would cover
+     the compact portrait. */
+  .vision-pill {
+    display: none;
+  }
+}
+
+/* One content inset for the header row, thread, prompts and composer. */
+.hx-thread,
+.hx-hero,
+.hx-composer,
+.hx-composer-hint {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}

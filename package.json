@@ -1,0 +1,39 @@
+{
+  "name": "hydro-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HYDRO AI — hybrid distributed intelligence. Multiple Minds. One Intelligence.",
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "share": "node scripts/share.mjs",
+    "typecheck": "tsc --noEmit",
+    "providers": "node scripts/check-providers.mjs",
+    "selftest": "node scripts/selftest.mjs",
+    "vision:test": "node scripts/vision-selftest.mjs",
+    "workspace:test": "node scripts/workspace-selftest.mjs",
+    "interaction:test": "node scripts/interaction-selftest.mjs",
+    "live:test": "node scripts/live-selftest.mjs",
+    "affect:test": "node scripts/affect-selftest.mjs",
+    "assistant:test": "node scripts/assistant-selftest.mjs",
+    "speech:test": "node scripts/speech-selftest.mjs",
+    "speech:bench": "node scripts/speech-bench.mjs",
+    "eval": "node scripts/hydro-eval.mjs"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
+    "next": "^15.5.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.9.0"
+  }
+}
