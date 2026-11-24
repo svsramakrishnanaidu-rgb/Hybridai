@@ -1012,3 +1012,7 @@ and rotate the API keys. Vercel is unsuitable for the file-backed store without 
 
 Unlicensed prototype. Third-party providers have their own terms, data-retention policies and
 costs; review them before handling other people's data.
+
+## Engineering guide
+
+[Explore working mechanisms, architecture diagrams and acceptance criteria](ENGINEERING_GUIDE.md). The guide distinguishes documented functionality from proposed improvements and tests that still require execution.
